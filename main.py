@@ -5,16 +5,19 @@ app.config['DEBUG']=True
 
 @app.route("/")
 def index():
-    return render_template('hello_form.html')
-
-@app.route("/hello", methods=['POST'])
+    return render_template("index.html", title="Home")
+@app.route("/hello")
 def hello():
+    return render_template('hello_form.html', title="Hello")
+
+@app.route("/hellooo", methods=['POST'])
+def hellooo():
     first_name = request.form["first_name"]
-    return render_template('hello_greeting.html', name=first_name)
+    return render_template('hello_greeting.html', name=first_name, title="Greeting")
 
 @app.route("/form-inputs")
 def display_form_inputs():
-    return render_template("form_inputs.html")
+    return render_template("form_inputs.html", title="form examples")
 
 @app.route("/form-inputs", methods=['POST'])
 def print_form_values():
@@ -23,9 +26,9 @@ def print_form_values():
         resp += "<b>{key}</b>: {value}<br>".format(key=field, value=request.form[field])
     return resp
 
-@app.route("/validate-time")
+@app.route("/validate-time", methods=['GET'])
 def display_time_form():
-    return render_template("time_form.html")
+    return render_template("time_form.html", title="Time Validator")
 
 def is_integer(num):
     try:
@@ -56,7 +59,7 @@ def validate_time():
         minutes = ''
     else:
         minutes = int(minutes)
-        if minutes >59 or minutes < 0:
+        if minutes > 59 or minutes < 0:
             minutes_error = "Minutes value out of range (0-59)"
             minutes = ''
     
@@ -65,7 +68,7 @@ def validate_time():
         return redirect('/valid-time?time={0}'.format(time))
     else:
        
-        return render_template("time_form.html", hours_error=hours_error, minutes_error=minutes_error,
+        return render_template("time_form.html",title="Time Validator", hours_error=hours_error, minutes_error=minutes_error,
         hours=hours, minutes=minutes)
     
 @app.route('/valid-time')
@@ -79,7 +82,7 @@ def todos():
     if request.method == 'POST':
         task = request.form['task']
         tasks.append(task)
-    return render_template("todos.html", tasks=tasks)
+    return render_template("todos.html", title="To Do List", tasks=tasks)
 
 app.run()
 
